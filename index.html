@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Interactive Chat</title>
+
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link href="css/styles.css" rel="stylesheet">
+
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <!-- Include all compiled plugins (below), or include individual files as needed -->
+    <script src="js/bootstrap.min.js"></script>
+    <!--<script src="js/knockout-3.3.0.js"></script>-->
+    <script data-main="chat-viewmodel" src="js/require.js"></script>
+
+</head>
+<body>
+
+<app-component>
+    <form class="login-form" data-bind="css: {'not-display' :  user.isAuthorized()}">
+        <h3>Please login</h3>
+        <input type="text" class="login-form-control" name="username" placeholder="Username" required="" autofocus=""
+               data-bind="value: user.name"/>
+        <input type="password" class="login-form-control" name="password" placeholder="Password" required=""
+               data-bind="value: user.password"/>
+        <button class="btn btn-lg btn-primary btn-block login-form-button" type="submit" data-bind="click: authorize">
+            Login
+        </button>
+        <label class="alert alert-warning" data-bind="visible: wrongAuthorized"> Unable to login. Wrong username or
+            password.</label>
+    </form>
+</app-component>
+
+<div class="row container" data-bind="visible: user.isAuthorized">
+    <ol class="breadcrumb">
+        <li class="active">
+            <label data-bind="text: user.name"></label>
+        </li>
+    </ol>
+    <div class="col-md-4">
+        <div class="panel panel-info">
+            <div class="panel-heading">
+                <h3 class="panel-title">
+                    Public Rooms
+                    <button class="btn btn-default" type="button">
+                        <span class="glyphicon glyphicon-plus"></span>
+                    </button>
+                </h3>
+            </div>
+            <div class="panel-body">
+                <div class="list-group" data-bind="foreach: user.publicRoomViewModels">
+                    <a href="#" class="list-group-item" data-bind="click: $parent.showSelectedPublicRoom">
+                        <span data-bind="text: name"></span>
+                        <span class="badge">1</span>
+                        <span class="input-group-btn">
+                            <button class="btn btn-primary" type="button"><span
+                                    class="glyphicon glyphicon-pencil"></span></button>
+                            <button class="btn btn-info" type="button"><span class="glyphicon glyphicon-remove"></span>
+                            </button>
+                        </span>
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="panel panel-info">
+            <div class="panel-heading">
+                <h3 class="panel-title">
+                    Private Rooms
+                    <button class="btn btn-default" type="button">
+                        <span class="glyphicon glyphicon-plus"></span>
+                    </button>
+                </h3>
+            </div>
+            <div class="panel-body">
+                <div class="list-group" data-bind="foreach: user.privateRoomViewModels">
+                    <a href="#" class="list-group-item" data-bind="click: $parent.showSelectedPrivateRoom">
+                        <span data-bind="text: name"></span>
+                        <span class="input-group-btn">
+                            <button class="btn btn-primary" type="button"><span
+                                    class="glyphicon glyphicon-pencil"></span></button>
+                            <button class="btn btn-info" type="button"><span class="glyphicon glyphicon-remove"></span>
+                            </button>
+                        </span>
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="panel panel-info">
+            <div class="panel-heading">
+                <h3 class="panel-title">
+                    Active users
+                </h3>
+            </div>
+            <div class="panel-body">
+                <div class="list-group" data-bind="foreach: allUsers">
+                    <a href="#" class="list-group-item">
+                        <span data-bind="text: name"></span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-8">
+
+        <div class="page-header">
+            <span data-bind="text: selectedRoomViewModel.name"></span>
+        </div>
+        <div data-bind="foreach: messages">
+            <span data-bind="text: date"> </span>
+            <span data-bind="text: authorName"></span>:
+            <span data-bind="text: text"></span>
+            <br>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-4">
+        </div>
+        <div class="input-group col-md-8" id="send-message-form">
+            <input type="text" class="form-control" placeholder="Input your message here ... "
+                   data-bind="value: newMessageText">
+            <span class="input-group-btn">
+                <button class="btn btn-primary" type="button" data-bind="click: sendMessage">Send</button>
+            </span>
+        </div>
+    </div>
+</div>
+</body>
+</html>
